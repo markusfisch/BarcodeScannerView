@@ -1,0 +1,43 @@
+buildscript {
+	repositories {
+		google()
+		mavenCentral()
+	}
+
+	dependencies {
+		classpath "com.android.tools.build:gradle:$tools_version"
+	}
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+
+android {
+	compileSdkVersion sdk_version
+
+	defaultConfig {
+		minSdkVersion 9
+		targetSdkVersion sdk_version
+
+		versionCode 21
+		versionName '1.0.0'
+	}
+
+	dependencies {
+		api 'com.github.markusfisch:CameraView:1.9.1'
+		api 'com.github.markusfisch:zxing-cpp:v1.2.0-aar'
+	}
+}
+
+afterEvaluate {
+	publishing {
+		publications {
+			release(MavenPublication) {
+				from components.release
+				groupId = 'com.github.markusfisch'
+				artifactId = 'final'
+				version = '1.0.0'
+			}
+		}
+	}
+}
