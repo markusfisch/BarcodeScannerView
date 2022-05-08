@@ -1,0 +1,17 @@
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	<de.markusfisch.android.barcodescannerview.widget.BarcodeScannerView
+		android:id="@+id/scanner"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"/>
+	<TextView
+		android:id="@+id/text"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="32dp"
+		android:gravity="center"
+		android:background="#80000000"
+		android:textColor="#ffffff"/>
+</FrameLayout>

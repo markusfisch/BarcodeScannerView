@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import de.markusfisch.android.barcodescannerview.widget.BarcodeScannerView;
@@ -39,26 +40,30 @@ public class MainActivity extends Activity {
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		checkPermissions();
+		setContentView(R.layout.activity_main);
 
-		scannerView = new BarcodeScannerView(this);
+		TextView textView = findViewById(R.id.text);
+
+		scannerView = findViewById(R.id.scanner);
 		scannerView.setOnBarcodeListener(result -> {
-			Toast.makeText(MainActivity.this, result,
-					Toast.LENGTH_SHORT).show();
+			// This listener is called from the Camera thread.
+			textView.post(() -> textView.setText(result));
+			// Return true to keep scanning for barcodes.
 			return true;
 		});
-		setContentView(scannerView);
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		openBarcodeScannerView();
+		scannerView.openAsync(BarcodeScannerView.findCameraId(
+				Camera.CameraInfo.CAMERA_FACING_BACK));
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		closeBarcodeScannerView();
+		scannerView.close();
 	}
 
 	private void checkPermissions() {
@@ -69,14 +74,5 @@ public class MainActivity extends Activity {
 				requestPermissions(new String[]{permission}, REQUEST_CAMERA);
 			}
 		}
-	}
-
-	private void openBarcodeScannerView() {
-		scannerView.openAsync(BarcodeScannerView.findCameraId(
-				Camera.CameraInfo.CAMERA_FACING_BACK));
-	}
-
-	private void closeBarcodeScannerView() {
-		scannerView.close();
 	}
 }

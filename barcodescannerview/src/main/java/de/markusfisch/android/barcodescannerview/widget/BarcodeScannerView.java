@@ -18,20 +18,28 @@ public class BarcodeScannerView extends CameraView {
 		boolean onBarcodeRead(String result);
 	}
 
-	public final Rect cropRect = new Rect();
+	public interface OnSetCropRectListener {
+		void onSetCropRect(Rect cropRect);
+	}
+
 	public final HashSet<Format> formats = new HashSet<>();
 
+	private final Rect cropRect = new Rect();
+
 	private OnBarcodeListener onBarcodeListener;
+	private OnSetCropRectListener onSetCropRectListener;
+	private OverlayView overlayView;
 	private boolean decoding = true;
+	private boolean useOverlay = true;
 
 	public BarcodeScannerView(Context context) {
 		super(context);
-		init();
+		init(context);
 	}
 
 	public BarcodeScannerView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init();
+		init(context);
 	}
 
 	public BarcodeScannerView(
@@ -39,11 +47,15 @@ public class BarcodeScannerView extends CameraView {
 			AttributeSet attrs,
 			int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-		init();
+		init(context);
 	}
 
 	public void setOnBarcodeListener(OnBarcodeListener listener) {
 		onBarcodeListener = listener;
+	}
+
+	public void setOnSetCropRectListener(OnSetCropRectListener listener) {
+		onSetCropRectListener = listener;
 	}
 
 	public void setDecoding(boolean enable) {
@@ -54,7 +66,15 @@ public class BarcodeScannerView extends CameraView {
 		return decoding;
 	}
 
-	private void init() {
+	public void setUseOverlay(boolean enable) {
+		useOverlay = enable;
+	}
+
+	public boolean useOverlay() {
+		return useOverlay;
+	}
+
+	private void init(Context context) {
 		formats.add(Format.QR_CODE);
 		setUseOrientationListener(true);
 		setOnCameraListener(new OnCameraListener() {
@@ -80,23 +100,51 @@ public class BarcodeScannerView extends CameraView {
 			public void onCameraReady(Camera camera) {
 				int frameWidth = getFrameWidth();
 				int frameHeight = getFrameHeight();
-				int yStride = (int) Math.ceil(frameWidth / 16.0) * 16;
+				int frameOrientation = getFrameOrientation();
 				cropRect.set(0, 0, frameWidth, frameHeight);
+				if (onSetCropRectListener != null) {
+					onSetCropRectListener.onSetCropRect(cropRect);
+				}
+				if (useOverlay) {
+					overlayView = new OverlayView(context);
+					overlayView.updateTransformationMatrix(
+							frameWidth,
+							frameHeight,
+							frameOrientation,
+							previewRect,
+							cropRect);
+					addView(overlayView);
+					overlayView.layout(
+							previewRect.left,
+							previewRect.top,
+							previewRect.right,
+							previewRect.bottom);
+				}
+				int yStride = (int) Math.ceil(frameWidth / 16.0) * 16;
 				camera.setPreviewCallback((data, camera1) -> {
-					if (decoding) {
-						Result result = ZxingCpp.INSTANCE.readByteArray(
-								data,
-								yStride,
-								cropRect,
-								0,
-								formats,
-								false,
-								true);
-						if (result != null && onBarcodeListener != null) {
-							decoding = onBarcodeListener.onBarcodeRead(
-									result.getText());
-						}
+					if (!decoding) {
+						return;
 					}
+					Result result = ZxingCpp.INSTANCE.readByteArray(
+							data,
+							yStride,
+							cropRect,
+							frameOrientation,
+							formats,
+							false,
+							true,
+							false);
+					if (result == null) {
+						return;
+					}
+					if (overlayView != null) {
+						overlayView.show(result.getPosition());
+					}
+					if (onBarcodeListener == null) {
+						return;
+					}
+					decoding = onBarcodeListener.onBarcodeRead(
+							result.getText());
 				});
 			}
 
@@ -107,6 +155,7 @@ public class BarcodeScannerView extends CameraView {
 			@Override
 			public void onCameraStopping(Camera camera) {
 				camera.setPreviewCallback(null);
+				overlayView = null;
 			}
 		});
 	}
