@@ -4,9 +4,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Region;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -19,7 +22,8 @@ public class OverlayView extends View {
 	private final Matrix matrix = new Matrix();
 	private final float[] coords = new float[16];
 
-	private float radius;
+	private float dotRadius;
+	private float cornerRadius;
 	private int count = 0;
 
 	public OverlayView(Context context) {
@@ -54,7 +58,7 @@ public class OverlayView extends View {
 		matrix.postScale(viewRect.width(), viewRect.height());
 		matrix.postTranslate(viewRect.left, viewRect.top);
 		matrix.mapRect(cropRectInView);
-		// Scale points in position according to upright camera image.
+		// Scale points relative to upright camera image.
 		float uprightWidth, uprightHeight;
 		switch (imageRotation) {
 			case 90:
@@ -79,30 +83,25 @@ public class OverlayView extends View {
 		if (position == null) {
 			return;
 		}
-		Point[] points = new Point[]{
-				position.getTopLeft(),
-				position.getTopRight(),
-				position.getBottomRight(),
-				position.getBottomLeft()
-		};
-		for (Point point : points) {
-			coords[count++] = point.x;
-			coords[count++] = point.y;
-		}
+		addCoordinate(position.getTopLeft());
+		addCoordinate(position.getTopRight());
+		addCoordinate(position.getBottomRight());
+		addCoordinate(position.getBottomLeft());
 		matrix.mapPoints(coords, 0, coords, 0, count);
 	}
 
 	@Override
 	public void onDraw(Canvas canvas) {
-		canvas.drawRect(cropRectInView, cropPaint);
+		drawClip(canvas, cropRectInView, cropPaint, cornerRadius);
 		for (int i = 0; i < count; i += 2) {
-			canvas.drawCircle(coords[i], coords[i + 1], radius, dotPaint);
+			canvas.drawCircle(coords[i], coords[i + 1], dotRadius, dotPaint);
 		}
 	}
 
 	private void init(Context context) {
 		float dp = context.getResources().getDisplayMetrics().density;
-		radius = 6f * dp;
+		dotRadius = 6f * dp;
+		cornerRadius = 8f * dp;
 
 		dotPaint.setStyle(Paint.Style.FILL);
 		dotPaint.setColor(0xc0ffffff);
@@ -110,5 +109,55 @@ public class OverlayView extends View {
 		cropPaint.setStyle(Paint.Style.STROKE);
 		cropPaint.setColor(0xffffffff);
 		cropPaint.setStrokeWidth(dp);
+	}
+
+	private void addCoordinate(Point point) {
+		coords[count++] = point.x;
+		coords[count++] = point.y;
+	}
+
+	private static void drawClip(Canvas canvas, RectF roi, Paint roiPaint,
+			float cornerRadius) {
+		float minDist = Math.min(roi.width(), roi.height()) / 2f;
+		if (minDist < 1f) {
+			return;
+		}
+		// canvas.clipRect() doesn't work reliably below KITKAT.
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+			float radius = Math.min(minDist / 2f, cornerRadius);
+			canvas.save();
+			clipOutPathCompat(canvas,
+					createRoundedRectPath(roi, radius, radius));
+			canvas.drawColor(0x80000000);
+			canvas.restore();
+		} else {
+			canvas.drawRect(roi, roiPaint);
+		}
+	}
+
+	private static void clipOutPathCompat(Canvas canvas, Path path) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			canvas.clipOutPath(path);
+		} else {
+			canvas.clipPath(path, Region.Op.DIFFERENCE);
+		}
+	}
+
+	private static Path createRoundedRectPath(RectF rect,
+			float rx, float ry) {
+		float widthMinusCorners = rect.width() - 2 * rx;
+		float heightMinusCorners = rect.height() - 2 * ry;
+		Path path = new Path();
+		path.moveTo(rect.right, rect.top + ry);
+		path.rQuadTo(0f, -ry, -rx, -ry);
+		path.rLineTo(-widthMinusCorners, 0f);
+		path.rQuadTo(-rx, 0f, -rx, ry);
+		path.rLineTo(0f, heightMinusCorners);
+		path.rQuadTo(0f, ry, rx, ry);
+		path.rLineTo(widthMinusCorners, 0f);
+		path.rQuadTo(rx, 0f, rx, -ry);
+		path.rLineTo(0f, -heightMinusCorners);
+		path.close();
+		return path;
 	}
 }
