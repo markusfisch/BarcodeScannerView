@@ -9,18 +9,22 @@ A barcode scanner view for Android. Batteries included.
 Add the JitPack repository in your root build.gradle at the end of
 repositories:
 
-	allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
+```groovy
+allprojects {
+	repositories {
+		...
+		maven { url 'https://jitpack.io' }
 	}
+}
+```
 
 Then add the dependency in your app/build.gradle:
 
-	dependencies {
-		implementation 'com.github.markusfisch:BarcodeScannerView:1.0.0'
-	}
+```groovy
+dependencies {
+	implementation 'com.github.markusfisch:BarcodeScannerView:1.0.0'
+}
+```
 
 ### Manually
 
@@ -28,24 +32,28 @@ Alternatively you may just download the latest `aar` from
 [Releases](https://github.com/markusfisch/BarcodeScannerView/releases)
 and put it into `app/libs` in your app.
 
-Then make sure your `app/build.gradle` contains the following line in the
-`dependencies` block:
+In this case you need to add the dependencies of this library to your
+`app/build.gradle`, too:
 
-	dependencies {
-		implementation fileTree(dir: 'libs', include: '*')
-		...
-	}
+```groovy
+dependencies {
+	implementation fileTree(dir: 'libs', include: '*')
+	implementation 'com.github.markusfisch:CameraView:1.9.1'
+	implementation 'com.github.markusfisch:zxing-cpp:v1.3.0-aar'
+	…
+}
+```
 
 ## How to use
 
 Add it to a layout:
 
 ````xml
-	<de.markusfisch.android.barcodescanerview.widget.BarcodeScannerView
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		android:id="@+id/barcode_scanner"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"/>
+<de.markusfisch.android.barcodescanerview.widget.BarcodeScannerView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/barcode_scanner"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"/>
 ```
 
 Or create it programmatically:
@@ -76,7 +84,8 @@ of your activity or fragment:
 
 ## Demo
 
-You can run the enclosed demo app to see if this widget is what you want.
+You can run the enclosed [demo app](app) to see if this widget is what you're
+looking for.
 
-Either import it into Android Studio or, if you're not on that thing from
-Redmond, just type `make` to build, install and run.
+Either import it into Android Studio or just type `make` to build, install
+and run it on a connected device.
