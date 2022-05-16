@@ -36,7 +36,7 @@ afterEvaluate {
 			release(MavenPublication) {
 				from components.release
 				groupId = 'com.github.markusfisch'
-				artifactId = 'final'
+				artifactId = 'barcodescannerview'
 				version = '1.0.0'
 			}
 		}
