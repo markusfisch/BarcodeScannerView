@@ -45,6 +45,7 @@ public class MainActivity extends Activity {
 		TextView textView = findViewById(R.id.text);
 
 		scannerView = findViewById(R.id.scanner);
+		scannerView.setCropRatio(.75f);
 		scannerView.setOnBarcodeListener(result -> {
 			// This listener is called from the Camera thread.
 			textView.post(() -> textView.setText(result));

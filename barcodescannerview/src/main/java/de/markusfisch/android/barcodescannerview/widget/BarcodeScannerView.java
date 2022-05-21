@@ -31,6 +31,7 @@ public class BarcodeScannerView extends CameraView {
 	private OverlayView overlayView;
 	private boolean decoding = true;
 	private boolean useOverlay = true;
+	private float cropRatio = 0f;
 
 	public BarcodeScannerView(Context context) {
 		super(context);
@@ -56,6 +57,14 @@ public class BarcodeScannerView extends CameraView {
 
 	public void setOnSetCropRectListener(OnSetCropRectListener listener) {
 		onSetCropRectListener = listener;
+	}
+
+	public void setCropRatio(float ratio) {
+		cropRatio = Math.max(0f, Math.min(1f, ratio));
+	}
+
+	public float getCropRatio() {
+		return cropRatio;
 	}
 
 	public void setDecoding(boolean enable) {
@@ -98,19 +107,19 @@ public class BarcodeScannerView extends CameraView {
 
 			@Override
 			public void onCameraReady(Camera camera) {
-				int frameWidth = getFrameWidth();
-				int frameHeight = getFrameHeight();
-				int frameOrientation = getFrameOrientation();
-				cropRect.set(0, 0, frameWidth, frameHeight);
+				int width = getFrameWidth();
+				int height = getFrameHeight();
+				int orientation = getFrameOrientation();
+				calculateCropRect(width, height);
 				if (onSetCropRectListener != null) {
 					onSetCropRectListener.onSetCropRect(cropRect);
 				}
 				if (useOverlay) {
 					overlayView = new OverlayView(context);
 					overlayView.updateTransformationMatrix(
-							frameWidth,
-							frameHeight,
-							frameOrientation,
+							width,
+							height,
+							orientation,
 							previewRect,
 							cropRect);
 					addView(overlayView);
@@ -120,7 +129,7 @@ public class BarcodeScannerView extends CameraView {
 							previewRect.right,
 							previewRect.bottom);
 				}
-				int yStride = (int) Math.ceil(frameWidth / 16.0) * 16;
+				int yStride = (int) Math.ceil(width / 16.0) * 16;
 				camera.setPreviewCallback((data, camera1) -> {
 					if (!decoding) {
 						return;
@@ -129,7 +138,7 @@ public class BarcodeScannerView extends CameraView {
 							data,
 							yStride,
 							cropRect,
-							frameOrientation,
+							orientation,
 							formats,
 							false,
 							true,
@@ -158,5 +167,21 @@ public class BarcodeScannerView extends CameraView {
 				overlayView = null;
 			}
 		});
+	}
+
+	private void calculateCropRect(int width, int height) {
+		if (cropRatio > 0f) {
+			int minPreview = Math.min(previewRect.width(),
+					previewRect.height());
+			int sizeInPreviewRect = (int) (minPreview * cropRatio);
+			int minFrame = Math.min(width, height);
+			int sizeInFrame = minFrame / minPreview * sizeInPreviewRect;
+			int left = (width - sizeInFrame) / 2;
+			int top = (height - sizeInFrame) / 2;
+			cropRect.set(left, top, left + sizeInFrame,
+					top + sizeInFrame);
+		} else {
+			cropRect.set(0, 0, width, height);
+		}
 	}
 }
