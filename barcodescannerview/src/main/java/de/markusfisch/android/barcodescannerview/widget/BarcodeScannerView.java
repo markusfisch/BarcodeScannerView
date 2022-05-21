@@ -158,14 +158,13 @@ public class BarcodeScannerView extends CameraView {
 							previewRect.right,
 							previewRect.bottom);
 				}
-				int yStride = (int) Math.ceil(width / 16.0) * 16;
 				camera.setPreviewCallback((data, camera1) -> {
 					if (!decoding) {
 						return;
 					}
 					Result result = ZxingCpp.INSTANCE.readByteArray(
 							data,
-							yStride,
+							width,
 							cropRect,
 							orientation,
 							formats,
