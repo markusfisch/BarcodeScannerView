@@ -15,7 +15,7 @@ import de.markusfisch.android.zxingcpp.ZxingCpp.Result;
 
 public class BarcodeScannerView extends CameraView {
 	public interface OnBarcodeListener {
-		boolean onBarcodeRead(String result);
+		boolean onBarcodeRead(Result result);
 	}
 
 	public interface OnSetCropRectListener {
@@ -152,8 +152,7 @@ public class BarcodeScannerView extends CameraView {
 					if (onBarcodeListener == null) {
 						return;
 					}
-					decoding = onBarcodeListener.onBarcodeRead(
-							result.getText());
+					decoding = onBarcodeListener.onBarcodeRead(result);
 				});
 			}
 

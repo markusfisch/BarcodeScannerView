@@ -48,7 +48,7 @@ public class MainActivity extends Activity {
 		scannerView.setCropRatio(.75f);
 		scannerView.setOnBarcodeListener(result -> {
 			// This listener is called from the Camera thread.
-			textView.post(() -> textView.setText(result));
+			textView.post(() -> textView.setText(result.getText()));
 			// Return true to keep scanning for barcodes.
 			return true;
 		});
