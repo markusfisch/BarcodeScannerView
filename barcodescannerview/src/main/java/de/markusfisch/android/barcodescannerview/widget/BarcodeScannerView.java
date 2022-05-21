@@ -30,7 +30,7 @@ public class BarcodeScannerView extends CameraView {
 	private OnSetCropRectListener onSetCropRectListener;
 	private OverlayView overlayView;
 	private boolean decoding = true;
-	private boolean useOverlay = true;
+	private boolean showOverlay = true;
 	private float cropRatio = 0f;
 
 	public BarcodeScannerView(Context context) {
@@ -103,13 +103,13 @@ public class BarcodeScannerView extends CameraView {
 	 *
 	 * @param enable true if the crop rectangle should be visible
 	 */
-	public void setUseOverlay(boolean enable) {
-		useOverlay = enable;
+	public void setShowOverlay(boolean enable) {
+		showOverlay = enable;
 	}
 
 	/** Return true if the crop rectangle is visible. */
-	public boolean useOverlay() {
-		return useOverlay;
+	public boolean showOverlay() {
+		return showOverlay;
 	}
 
 	private void init(Context context) {
@@ -143,7 +143,7 @@ public class BarcodeScannerView extends CameraView {
 				if (onSetCropRectListener != null) {
 					onSetCropRectListener.onSetCropRect(cropRect);
 				}
-				if (useOverlay) {
+				if (showOverlay) {
 					overlayView = new OverlayView(context);
 					overlayView.updateTransformationMatrix(
 							width,
