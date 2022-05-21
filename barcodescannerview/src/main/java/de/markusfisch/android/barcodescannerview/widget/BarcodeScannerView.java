@@ -51,34 +51,63 @@ public class BarcodeScannerView extends CameraView {
 		init(context);
 	}
 
+	/**
+	 * Set listener for recognized barcodes.
+	 *
+	 * @param listener listener for barcodes
+	 */
 	public void setOnBarcodeListener(OnBarcodeListener listener) {
 		onBarcodeListener = listener;
 	}
 
+	/**
+	 * Set listener to modify the crop rectangle.
+	 *
+	 * @param listener listener to modify crop rectangle
+	 */
 	public void setOnSetCropRectListener(OnSetCropRectListener listener) {
 		onSetCropRectListener = listener;
 	}
 
+	/**
+	 * Set the ratio between the size of the crop rectangle and the shorter
+	 * dimension of the view.
+	 *
+	 * @param ratio a value from 0 to 1
+	 */
 	public void setCropRatio(float ratio) {
 		cropRatio = Math.max(0f, Math.min(1f, ratio));
 	}
 
+	/** Return current ratio between crop rectangle and view size. */
 	public float getCropRatio() {
 		return cropRatio;
 	}
 
+	/**
+	 * Enable or disable decoding barcodes.
+	 *
+	 * @param enable true if scanning should be active
+	 */
 	public void setDecoding(boolean enable) {
 		decoding = enable;
 	}
 
+	/** Returns true if scanning is active. */
 	public boolean isDecoding() {
 		return decoding;
 	}
 
+	/**
+	 * Change visibility of the crop rectangle overlay.
+	 *
+	 * @param enable true if the crop rectangle should be visible
+	 */
 	public void setUseOverlay(boolean enable) {
 		useOverlay = enable;
 	}
 
+	/** Return true if the crop rectangle is visible. */
 	public boolean useOverlay() {
 		return useOverlay;
 	}
