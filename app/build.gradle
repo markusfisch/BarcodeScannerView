@@ -11,6 +11,14 @@ android {
 		versionCode 1
 		versionName '0.0.0'
 	}
+
+	buildTypes {
+		release {
+			minifyEnabled true
+			shrinkResources true
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+		}
+	}
 }
 
 dependencies {
