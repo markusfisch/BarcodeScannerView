@@ -79,7 +79,9 @@ public class BarcodeScannerView extends CameraView {
 		cropRatio = Math.max(0f, Math.min(1f, ratio));
 	}
 
-	/** Return current ratio between crop rectangle and view size. */
+	/**
+	 * Return current ratio between crop rectangle and view size.
+	 */
 	public float getCropRatio() {
 		return cropRatio;
 	}
@@ -93,7 +95,9 @@ public class BarcodeScannerView extends CameraView {
 		decoding = enable;
 	}
 
-	/** Returns true if scanning is active. */
+	/**
+	 * Returns true if scanning is active.
+	 */
 	public boolean isDecoding() {
 		return decoding;
 	}
@@ -107,7 +111,9 @@ public class BarcodeScannerView extends CameraView {
 		showOverlay = enable;
 	}
 
-	/** Return true if the crop rectangle is visible. */
+	/**
+	 * Return true if the crop rectangle is visible.
+	 */
 	public boolean showOverlay() {
 		return showOverlay;
 	}
