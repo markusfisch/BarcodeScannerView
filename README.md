@@ -57,7 +57,7 @@ you are using minification:
 
 Add it to a layout:
 
-````xml
+```xml
 <de.markusfisch.android.barcodescanerview.widget.BarcodeScannerView
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/barcode_scanner"
@@ -90,6 +90,21 @@ of your activity or fragment:
 		scannerView.close();
 	}
 ```
+
+### Crop window
+
+You can define a square crop window with `setCropRatio()`:
+
+```java
+scannerView.setCropRatio(0.75f);
+```
+
+The number is the ratio between the size of the crop square and the
+shorter dimension of the view. For example, `0.75` means 75% of the view
+width in portrait orientation.
+
+A crop window can improve the user experience by providing a clear UI
+and it also improves performance because there's less data to process.
 
 ## Demo
 
