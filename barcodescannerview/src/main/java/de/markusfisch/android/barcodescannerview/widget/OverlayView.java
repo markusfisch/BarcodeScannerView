@@ -21,6 +21,7 @@ public class OverlayView extends View {
 	private final RectF cropRectInView = new RectF();
 	private final Matrix matrix = new Matrix();
 	private final float[] coords = new float[16];
+	private final Runnable clearPointsRunnable = () -> clear();
 
 	private float dotRadius;
 	private float cornerRadius;
@@ -78,8 +79,7 @@ public class OverlayView extends View {
 	}
 
 	public void show(Position position) {
-		invalidate();
-		count = 0;
+		clear();
 		if (position == null) {
 			return;
 		}
@@ -88,6 +88,13 @@ public class OverlayView extends View {
 		addCoordinate(position.getBottomRight());
 		addCoordinate(position.getBottomLeft());
 		matrix.mapPoints(coords, 0, coords, 0, count);
+		removeCallbacks(clearPointsRunnable);
+		postDelayed(clearPointsRunnable, 200);
+	}
+
+	private void clear() {
+		invalidate();
+		count = 0;
 	}
 
 	@Override
