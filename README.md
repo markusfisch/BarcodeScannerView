@@ -106,6 +106,42 @@ width in portrait orientation.
 A crop window can improve the user experience by providing a clear UI
 and it also improves performance because there's less data to process.
 
+### Set barcode formats
+
+By default only `Format.QR_CODE` is set.
+
+If you don't want to scan for QR Codes you can do:
+
+```java
+scannerView.formats.clear();
+```
+
+To scan for `Format.EAN_13` for example:
+
+```java
+scannerView.formats.add(de.markusfisch.android.zxingcpp.ZxingCpp.Format.EAN_13);
+```
+
+The following formats are supported:
+
+* `AZTEC`
+* `CODABAR`
+* `CODE_39`
+* `CODE_93`
+* `CODE_128`
+* `DATA_BAR`
+* `DATA_BAR_EXPANDED`
+* `DATA_MATRIX`
+* `EAN_8`
+* `EAN_13`
+* `ITF`
+* `MAXICODE`
+* `PDF_417`
+* `QR_CODE`
+* `MICRO_QR_CODE`
+* `UPC_A`
+* `UPC_E`
+
 ## Demo
 
 You can run the enclosed [demo app](app) to see if this widget is what you're
