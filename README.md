@@ -1,6 +1,12 @@
 # Barcode Scanner View
 
 A barcode scanner view for Android. Batteries included.
+Requires `minSdkVersion` of 9 or higher.
+
+This is an Open Source alternative for the
+[Google code scanner](https://developers.google.com/ml-kit/code-scanner)
+in Google's ML Kit. If you just need to scan a barcode and do not need to
+embed the scanning view, you should also check out the ML Kit solution.
 
 ## How to include
 
@@ -39,7 +45,7 @@ In this case you need to add the dependencies of this library to your
 dependencies {
 	implementation fileTree(dir: 'libs', include: '*')
 	implementation 'com.github.markusfisch:CameraView:1.9.1'
-	implementation 'com.github.markusfisch:zxing-cpp:v1.3.0-aar'
+	implementation 'com.github.markusfisch:zxing-cpp:v1.4.0-aar'
 	…
 }
 ```
