@@ -176,6 +176,7 @@ public class BarcodeScannerView extends CameraView {
 							formats,
 							false,
 							true,
+							false,
 							false);
 					if (result == null) {
 						return;
