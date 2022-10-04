@@ -31,6 +31,9 @@ public class BarcodeScannerView extends CameraView {
 	private OverlayView overlayView;
 	private boolean decoding = true;
 	private boolean showOverlay = true;
+	private boolean tryRotate = true;
+	private boolean tryInvert = true;
+	private boolean tryDownscale = true;
 	private float cropRatio = 0f;
 
 	public BarcodeScannerView(Context context) {
@@ -67,6 +70,35 @@ public class BarcodeScannerView extends CameraView {
 	 */
 	public void setOnSetCropRectListener(OnSetCropRectListener listener) {
 		onSetCropRectListener = listener;
+	}
+
+	/**
+	 * Set if codes that are rotated by 90 degree should be read.
+	 * Default is true.
+	 *
+	 * @param enable true if rotated codes should be read
+	 */
+	public void setTryRotate(boolean enable) {
+		tryRotate = enable;
+	}
+
+	/**
+	 * Set if inverted codes should be read. Default is true.
+	 *
+	 * @param enable true if inverted codes should be read
+	 */
+	public void setTryInvert(boolean enable) {
+		tryInvert = enable;
+	}
+
+	/**
+	 * Set if the camera frame should also be tried downscaled to improve
+	 * detection of very big or distorted codes. Default is true.
+	 *
+	 * @param enable true if inverted codes should be read
+	 */
+	public void setTryDownscale(boolean enable) {
+		tryDownscale = enable;
 	}
 
 	/**
@@ -175,9 +207,9 @@ public class BarcodeScannerView extends CameraView {
 							orientation,
 							formats,
 							false,
-							true,
-							false,
-							false);
+							tryRotate,
+							tryInvert,
+							tryDownscale);
 					if (result == null) {
 						return;
 					}
