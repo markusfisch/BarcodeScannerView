@@ -241,7 +241,8 @@ public class BarcodeScannerView extends CameraView {
 					previewRect.height());
 			int sizeInPreviewRect = (int) (minPreview * cropRatio);
 			int minFrame = Math.min(width, height);
-			int sizeInFrame = minFrame / minPreview * sizeInPreviewRect;
+			int sizeInFrame = Math.round(
+					(float) minFrame / minPreview * sizeInPreviewRect);
 			int left = (width - sizeInFrame) / 2;
 			int top = (height - sizeInFrame) / 2;
 			cropRect.set(left, top, left + sizeInFrame,
