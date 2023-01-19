@@ -3,6 +3,7 @@ package de.markusfisch.android.barcodescannerview.widget;
 import android.content.Context;
 import android.graphics.Rect;
 import android.hardware.Camera;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 
 import java.util.HashSet;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import de.markusfisch.android.cameraview.widget.CameraView;
 import de.markusfisch.android.zxingcpp.ZxingCpp;
+import de.markusfisch.android.zxingcpp.ZxingCpp.DecodeHints;
 import de.markusfisch.android.zxingcpp.ZxingCpp.Format;
 import de.markusfisch.android.zxingcpp.ZxingCpp.Result;
 
@@ -196,6 +198,11 @@ public class BarcodeScannerView extends CameraView {
 							previewRect.right,
 							previewRect.bottom);
 				}
+				DecodeHints decodeHints = new DecodeHints();
+				decodeHints.setTryRotate(tryRotate);
+				decodeHints.setTryInvert(tryInvert);
+				decodeHints.setTryDownscale(tryDownscale);
+				decodeHints.setFormats(TextUtils.join(",", formats));
 				camera.setPreviewCallback((data, camera1) -> {
 					if (!decoding) {
 						return;
@@ -205,11 +212,7 @@ public class BarcodeScannerView extends CameraView {
 							width,
 							cropRect,
 							orientation,
-							formats,
-							false,
-							tryRotate,
-							tryInvert,
-							tryDownscale);
+							decodeHints);
 					if (result == null) {
 						return;
 					}
