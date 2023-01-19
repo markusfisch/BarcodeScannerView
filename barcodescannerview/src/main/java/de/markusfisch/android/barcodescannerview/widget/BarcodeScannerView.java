@@ -11,6 +11,7 @@ import java.util.List;
 
 import de.markusfisch.android.cameraview.widget.CameraView;
 import de.markusfisch.android.zxingcpp.ZxingCpp;
+import de.markusfisch.android.zxingcpp.ZxingCpp.Binarizer;
 import de.markusfisch.android.zxingcpp.ZxingCpp.DecodeHints;
 import de.markusfisch.android.zxingcpp.ZxingCpp.Format;
 import de.markusfisch.android.zxingcpp.ZxingCpp.Result;
@@ -36,6 +37,7 @@ public class BarcodeScannerView extends CameraView {
 	private boolean tryRotate = true;
 	private boolean tryInvert = true;
 	private boolean tryDownscale = true;
+	private boolean useLocalAverage = false;
 	private float cropRatio = 0f;
 
 	public BarcodeScannerView(Context context) {
@@ -207,6 +209,13 @@ public class BarcodeScannerView extends CameraView {
 					if (!decoding) {
 						return;
 					}
+					// By default, ZXing uses LOCAL_AVERAGE, but
+					// this does not work well with inverted
+					// barcodes on low-contrast backgrounds.
+					useLocalAverage ^= true;
+					decodeHints.setBinarizer(useLocalAverage
+							? Binarizer.LOCAL_AVERAGE
+							: Binarizer.GLOBAL_HISTOGRAM);
 					Result result = ZxingCpp.INSTANCE.readByteArray(
 							data,
 							width,
