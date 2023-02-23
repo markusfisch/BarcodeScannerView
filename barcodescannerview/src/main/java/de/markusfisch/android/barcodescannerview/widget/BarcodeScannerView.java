@@ -204,6 +204,7 @@ public class BarcodeScannerView extends CameraView {
 				decodeHints.setTryRotate(tryRotate);
 				decodeHints.setTryInvert(tryInvert);
 				decodeHints.setTryDownscale(tryDownscale);
+				decodeHints.setMaxNumberOfSymbols(1);
 				decodeHints.setFormats(TextUtils.join(",", formats));
 				camera.setPreviewCallback((data, camera1) -> {
 					if (!decoding) {
@@ -216,15 +217,16 @@ public class BarcodeScannerView extends CameraView {
 					decodeHints.setBinarizer(useLocalAverage
 							? Binarizer.LOCAL_AVERAGE
 							: Binarizer.GLOBAL_HISTOGRAM);
-					Result result = ZxingCpp.INSTANCE.readByteArray(
+					List<Result> results = ZxingCpp.INSTANCE.readByteArray(
 							data,
 							width,
 							cropRect,
 							orientation,
 							decodeHints);
-					if (result == null) {
+					if (results == null || results.size() < 1) {
 						return;
 					}
+					Result result = results.get(0);
 					if (overlayView != null) {
 						overlayView.show(result.getPosition());
 					}
