@@ -59,6 +59,24 @@ public class BarcodeScannerView extends CameraView {
 	}
 
 	/**
+	 * Open back facing camera.
+	 */
+	public void openAsync() {
+		openAsync(false);
+	}
+
+	/**
+	 * Open camera.
+	 *
+	 * @param front true to open the front camera, false for the back camera
+	 */
+	public void openAsync(boolean front) {
+		openAsync(BarcodeScannerView.findCameraId(front
+				? Camera.CameraInfo.CAMERA_FACING_FRONT
+				: Camera.CameraInfo.CAMERA_FACING_BACK));
+	}
+
+	/**
 	 * Set listener for recognized barcodes.
 	 *
 	 * @param listener listener for barcodes

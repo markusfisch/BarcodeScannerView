@@ -2,7 +2,6 @@ package de.markusfisch.android.barcodescannerviewdemo.activity;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Window;
@@ -57,8 +56,7 @@ public class MainActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		scannerView.openAsync(BarcodeScannerView.findCameraId(
-				Camera.CameraInfo.CAMERA_FACING_BACK));
+		scannerView.openAsync();
 	}
 
 	@Override

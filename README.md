@@ -86,8 +86,7 @@ of your activity or fragment:
 	@Override
 	public void onResume() {
 		super.onResume();
-		scannerView.openAsync(BarcodeScannerView.findCameraId(
-				Camera.CameraInfo.CAMERA_FACING_BACK));
+		scannerView.openAsync();
 	}
 
 	@Override
