@@ -28,7 +28,7 @@ Then add the dependency in your app/build.gradle:
 
 ```groovy
 dependencies {
-	implementation 'com.github.markusfisch:BarcodeScannerView:1.4.1'
+	implementation 'com.github.markusfisch:BarcodeScannerView:1.5.0'
 }
 ```
 

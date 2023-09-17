@@ -20,8 +20,8 @@ android {
 		minSdkVersion 9
 		targetSdkVersion sdk_version
 
-		versionCode 29
-		versionName '1.4.1'
+		versionCode 30
+		versionName '1.5.0'
 	}
 
 	dependencies {
@@ -37,7 +37,7 @@ afterEvaluate {
 				from components.release
 				groupId = 'com.github.markusfisch'
 				artifactId = 'barcodescannerview'
-				version = '1.4.1'
+				version = '1.5.0'
 			}
 		}
 	}
