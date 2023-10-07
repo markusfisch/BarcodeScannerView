@@ -21,7 +21,7 @@ android {
 		targetSdkVersion sdk_version
 
 		versionCode 30
-		versionName '1.5.0'
+		versionName '1.5.1'
 	}
 
 	dependencies {
@@ -37,7 +37,7 @@ afterEvaluate {
 				from components.release
 				groupId = 'com.github.markusfisch'
 				artifactId = 'barcodescannerview'
-				version = '1.5.0'
+				version = '1.5.1'
 			}
 		}
 	}
