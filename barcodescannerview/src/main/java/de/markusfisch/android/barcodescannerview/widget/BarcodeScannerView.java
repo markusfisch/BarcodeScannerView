@@ -12,8 +12,8 @@ import java.util.List;
 import de.markusfisch.android.cameraview.widget.CameraView;
 import de.markusfisch.android.zxingcpp.ZxingCpp;
 import de.markusfisch.android.zxingcpp.ZxingCpp.Binarizer;
-import de.markusfisch.android.zxingcpp.ZxingCpp.DecodeHints;
-import de.markusfisch.android.zxingcpp.ZxingCpp.Format;
+import de.markusfisch.android.zxingcpp.ZxingCpp.ReaderOptions;
+import de.markusfisch.android.zxingcpp.ZxingCpp.BarcodeFormat;
 import de.markusfisch.android.zxingcpp.ZxingCpp.Result;
 
 public class BarcodeScannerView extends CameraView {
@@ -25,7 +25,7 @@ public class BarcodeScannerView extends CameraView {
 		void onSetCropRect(Rect cropRect);
 	}
 
-	public final HashSet<Format> formats = new HashSet<>();
+	public final HashSet<BarcodeFormat> formats = new HashSet<>();
 
 	private final Rect cropRect = new Rect();
 
@@ -173,7 +173,7 @@ public class BarcodeScannerView extends CameraView {
 	}
 
 	private void init(Context context) {
-		formats.add(Format.QR_CODE);
+		formats.add(BarcodeFormat.QR_CODE);
 		setUseOrientationListener(true);
 		setOnCameraListener(new OnCameraListener() {
 			@Override
@@ -218,12 +218,12 @@ public class BarcodeScannerView extends CameraView {
 							previewRect.right,
 							previewRect.bottom);
 				}
-				DecodeHints decodeHints = new DecodeHints();
-				decodeHints.setTryRotate(tryRotate);
-				decodeHints.setTryInvert(tryInvert);
-				decodeHints.setTryDownscale(tryDownscale);
-				decodeHints.setMaxNumberOfSymbols(1);
-				decodeHints.setFormats(TextUtils.join(",", formats));
+				ReaderOptions options = new ReaderOptions();
+				options.setTryRotate(tryRotate);
+				options.setTryInvert(tryInvert);
+				options.setTryDownscale(tryDownscale);
+				options.setMaxNumberOfSymbols(1);
+				options.setFormats(formats);
 				camera.setPreviewCallback((data, camera1) -> {
 					if (!decoding) {
 						return;
@@ -232,7 +232,7 @@ public class BarcodeScannerView extends CameraView {
 					// this does not work well with inverted
 					// barcodes on low-contrast backgrounds.
 					useLocalAverage ^= true;
-					decodeHints.setBinarizer(useLocalAverage
+					options.setBinarizer(useLocalAverage
 							? Binarizer.LOCAL_AVERAGE
 							: Binarizer.GLOBAL_HISTOGRAM);
 					List<Result> results = ZxingCpp.INSTANCE.readByteArray(
@@ -240,7 +240,7 @@ public class BarcodeScannerView extends CameraView {
 							width,
 							cropRect,
 							orientation,
-							decodeHints);
+							options);
 					if (results == null || results.size() < 1) {
 						return;
 					}
