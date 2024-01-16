@@ -24,6 +24,12 @@ android {
 		versionName '1.6.0'
 	}
 
+	publishing {
+		singleVariant('release') {
+			withSourcesJar()
+		}
+	}
+
 	dependencies {
 		api 'com.github.markusfisch:CameraView:1.9.2'
 		api 'com.github.markusfisch:zxing-cpp:v2.2.0.1'
@@ -35,9 +41,9 @@ afterEvaluate {
 		publications {
 			release(MavenPublication) {
 				from components.release
-				groupId = 'com.github.markusfisch'
+				groupId = project.group.toString()
 				artifactId = 'barcodescannerview'
-				version = '1.6.0'
+				version = project.version.toString()
 			}
 		}
 	}
