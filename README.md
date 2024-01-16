@@ -50,15 +50,6 @@ dependencies {
 }
 ```
 
-### Proguard/R8
-
-Don't forget to add the following line to your `app/proguard-rules.pro` if
-you are using minification:
-
-```
--keep class de.markusfisch.android.zxingcpp.** { *; }
-```
-
 ## How to use
 
 Add it to a layout:
