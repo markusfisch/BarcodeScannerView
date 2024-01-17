@@ -20,5 +20,8 @@ start:
 uninstall:
 	adb $(TARGET) uninstall $(PACKAGE)
 
+publish:
+	./gradlew publishToMavenLocal
+
 clean:
 	./gradlew clean
