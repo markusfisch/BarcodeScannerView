@@ -36,7 +36,7 @@ android {
 
 	dependencies {
 		api 'com.github.markusfisch:CameraView:1.10.0'
-		api 'com.github.markusfisch:zxing-cpp:v2.2.0.1'
+		api 'com.github.markusfisch:zxing-cpp:v2.2.0.2'
 	}
 }
 
