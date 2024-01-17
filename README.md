@@ -44,11 +44,14 @@ In this case you need to add the dependencies of this library to your
 ```groovy
 dependencies {
 	implementation fileTree(dir: 'libs', include: '*')
-	implementation 'com.github.markusfisch:CameraView:1.9.2'
-	implementation 'com.github.markusfisch:zxing-cpp:v2.1.0.1'
+	implementation 'com.github.markusfisch:CameraView:…'
+	implementation 'com.github.markusfisch:zxing-cpp:…'
 	…
 }
 ```
+
+Please take the version numbers for these two dependencies from
+`barcodescannerview/build.gradle`.
 
 ## How to use
 
