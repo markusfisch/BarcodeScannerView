@@ -22,8 +22,8 @@ android {
 		minSdk 9
 		targetSdk sdk_version
 
-		versionCode 33
-		versionName '1.6.2'
+		versionCode 34
+		versionName '1.6.3'
 
 		consumerProguardFiles 'consumer-rules.pro'
 	}
