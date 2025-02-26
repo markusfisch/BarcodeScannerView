@@ -6,11 +6,17 @@
 		android:id="@+id/scanner"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"/>
-	<TextView
-		android:id="@+id/text"
+
+	<FrameLayout
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:padding="32dp"
-		android:gravity="center"
-		android:textColor="#ffffff"/>
+		android:layout_height="match_parent"
+		android:fitsSystemWindows="true">
+		<TextView
+			android:id="@+id/text"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:padding="32dp"
+			android:gravity="center"
+			android:textColor="#ffffff"/>
+	</FrameLayout>
 </FrameLayout>
