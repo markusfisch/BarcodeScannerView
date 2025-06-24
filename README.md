@@ -58,7 +58,7 @@ Please take the version numbers for these two dependencies from
 Add it to a layout:
 
 ```xml
-<de.markusfisch.android.barcodescanerview.widget.BarcodeScannerView
+<de.markusfisch.android.barcodescannerview.widget.BarcodeScannerView
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/barcode_scanner"
 	android:layout_width="match_parent"
@@ -68,7 +68,7 @@ Add it to a layout:
 Or create it programmatically:
 
 ```java
-import de.markusfisch.android.barcodescanerview.widget.BarcodeScannerView;
+import de.markusfisch.android.barcodescannerview.widget.BarcodeScannerView;
 
 BarcodeScannerView scannerView = new BarcodeScannerView(context);
 ```
