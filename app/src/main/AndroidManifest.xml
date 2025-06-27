@@ -7,7 +7,8 @@
 		android:xlargeScreens="true"/>
 	<uses-permission android:name="android.permission.CAMERA"/>
 	<uses-feature android:name="android.hardware.camera"/>
-	<uses-feature android:name="android.hardware.camera.autofocus"/>
+	<uses-feature android:name="android.hardware.camera.autofocus"
+		android:required="false"/>
 	<application
 		tools:ignore="UnusedAttribute"
 		android:allowBackup="false"
